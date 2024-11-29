@@ -20,7 +20,7 @@ Comprehensive DevOps CI/CD pipeline demonstrating modern cloud-native applicatio
 - **Artifact Management**: Nexus
 - **Monitoring**: Prometheus, Grafana
 - **Security Scanning**: Trivy
-
+- **Cloud Provider**: AWS (EC2 Instances)
 
 ## 🔧 Key Configurations
 
@@ -38,6 +38,26 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
+### 🔒 Security Configuration
+```yaml
+# Kubernetes Service Account with RBAC
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins
+  namespace: webapps
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: app-role
+  namespace: webapps
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+```
 ### Jenkins Pipeline Snippet
 ```groovy
 pipeline {
@@ -88,27 +108,34 @@ rules:
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ```
 
-## 🚀 Pipeline Stages
-1. Source Code Checkout
-2. Compilation
-3. Testing
-4. Security Scanning
+## 🚀 Comprehensive Pipeline Stages
+1. Source Code Management
+2. Compilation & Dependency Resolution
+3. Automated Testing
+   - Unit Tests
+   - Integration Tests
+4. Code Quality Analysis
+   - Static Code Analysis
+   - SonarQube Scanning
+5. Security Vulnerability Scanning
    - File System Scan
-   - SonarQube Analysis
-5. Build Artifact
-6. Docker Image Creation
-7. Kubernetes Deployment
-8. Monitoring Setup
+   - Container Image Scan
+6. Artifact Building
+7. Docker Image Creation
+8. Kubernetes Deployment
+9. Automated Monitoring Setup
 
-## 🔒 Security Implementations
-- Static Code Analysis
-- Container Image Scanning
-- Kubernetes RBAC
+## 🔒 Advanced Security Implementations
+- Multi-layered Security Scanning
+- Kubernetes Role-Based Access Control (RBAC)
 - Service Account Authentication
+- Container Image Vulnerability Detection
+- Network Policy Enforcement
 
-## 📊 Monitoring Setup
-```bash
-# Prometheus Configuration
+
+## 📊 Monitoring Architecture
+```yaml
+# Prometheus Monitoring Configuration
 global:
   scrape_interval: 15s
 
@@ -116,7 +143,17 @@ scrape_configs:
   - job_name: 'kubernetes-nodes'
     kubernetes_sd_configs:
       - role: node
+  - job_name: 'application-monitoring'
+    static_configs:
+      - targets: ['app-metrics:8080']
 ```
+
+## 🛠️ Performance Optimization
+- Efficient Kubernetes Resource Allocation
+- Automated Scaling Configurations
+- Centralized Logging
+- Comprehensive Monitoring Dashboards
+
 
 ## 📦 Prerequisites
 - Kubernetes Cluster
