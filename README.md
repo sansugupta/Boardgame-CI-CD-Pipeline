@@ -1,7 +1,5 @@
 # 🎲 DevOps Ultimate Pipeline: Board Game Application Deployment
 
-
-
 ## 🌐 Project Overview
 Comprehensive DevOps CI/CD pipeline demonstrating modern cloud-native application deployment and management.
 
